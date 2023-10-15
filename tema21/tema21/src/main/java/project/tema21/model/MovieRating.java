@@ -25,19 +25,14 @@ public class MovieRating {
     public MovieRating() {
     }
 
-    public MovieRating(int id, int rating, String agency, Movie belongingMovie) {
-        this.id = id;
+    public MovieRating(int rating, String agency, Movie belongingMovie) {
         this.rating = rating;
         this.agency = agency;
         this.belongingMovie = belongingMovie;
     }
 
-    public MovieRating(int rating, String agency) {
-        this.rating = rating;
-        this.agency = agency;
-    }
-
-    public MovieRating(int rating, String agency, Movie belongingMovie) {
+    public MovieRating(int id, int rating, String agency, Movie belongingMovie) {
+        this.id = id;
         this.rating = rating;
         this.agency = agency;
         this.belongingMovie = belongingMovie;

@@ -1,7 +1,9 @@
 package project.tema21.model;
 
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 
 import java.util.ArrayList;
@@ -25,16 +27,20 @@ public class Movie {
     @JoinColumn(name = "rating_id")
     private MovieRating movieRating;
 
+
+    @JsonBackReference
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "belongingMovie")
     private List<Review> reviews;
 
+    @JsonManagedReference
     @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JsonIgnore
     @JoinColumn(name = "studio_id")
     private Studio studio;
 
 
-    @ManyToMany
+    @ManyToMany(cascade = CascadeType.ALL)
+    @JsonBackReference
     @JoinTable (
             name = "movies_actors",
             joinColumns = @JoinColumn(name = "movie_id"),
@@ -42,22 +48,6 @@ public class Movie {
     )
     private List<Actor> actors;
 
-
-    public Movie(int movieId, String movieName, int releaseYear, MovieRating movieRating, List<Review> reviews, Studio studio, List<Actor> actors) {
-        this.movieId = movieId;
-        this.movieName = movieName;
-        this.releaseYear = releaseYear;
-        this.movieRating = movieRating;
-        this.reviews = reviews;
-        this.studio = studio;
-        this.actors = actors;
-    }
-
-    public Movie(String movieName, int releaseYear, List<Actor> actors) {
-        this.movieName = movieName;
-        this.releaseYear = releaseYear;
-        this.actors = actors;
-    }
 
     public Movie(String movieName, int releaseYear, MovieRating movieRating, List<Review> reviews, Studio studio, List<Actor> actors) {
         this.movieName = movieName;
@@ -68,43 +58,14 @@ public class Movie {
         this.actors = actors;
     }
 
-    public Movie(int movieId, String movieName, int releaseYear, MovieRating movieRating) {
+    public Movie(int movieId, String movieName, int releaseYear, MovieRating movieRating, List<Review> reviews, Studio studio, List<Actor> actors) {
         this.movieId = movieId;
-        this.movieName = movieName;
-        this.releaseYear = releaseYear;
-        this.movieRating = movieRating;
-    }
-
-    public Movie(String movieName, int releaseYear, MovieRating movieRating) {
-        this.movieName = movieName;
-        this.releaseYear = releaseYear;
-        this.movieRating = movieRating;
-    }
-
-    public Movie(String movieName, int releaseYear) {
-        this.movieName = movieName;
-        this.releaseYear = releaseYear;
-    }
-
-    public Movie(int movieId, String movieName, int releaseYear) {
-        this.movieId = movieId;
-        this.movieName = movieName;
-        this.releaseYear = releaseYear;
-    }
-
-    public Movie(String movieName, int releaseYear, MovieRating movieRating, List<Review> reviews) {
-        this.movieName = movieName;
-        this.releaseYear = releaseYear;
-        this.movieRating = movieRating;
-        this.reviews = reviews;
-    }
-
-    public Movie(String movieName, int releaseYear, MovieRating movieRating, List<Review> reviews, Studio studio) {
         this.movieName = movieName;
         this.releaseYear = releaseYear;
         this.movieRating = movieRating;
         this.reviews = reviews;
         this.studio = studio;
+        this.actors = actors;
     }
 
     public Movie() {
@@ -150,24 +111,6 @@ public class Movie {
         this.reviews = reviews;
     }
 
-    public void addReview(Review review) {
-        if (reviews == null) {
-            this.reviews = new ArrayList<>();
-        }
-        else {
-            this.reviews.add(review);
-        }
-    }
-
-    public void removeReview(Review review) {
-        if (review == null) {
-            this.reviews = new ArrayList<>();
-        }
-        else {
-            this.reviews.remove(review);
-        }
-    }
-
     public Studio getStudio() {
         return studio;
     }
@@ -183,4 +126,19 @@ public class Movie {
     public void setActors(List<Actor> actors) {
         this.actors = actors;
     }
+
+    public void addReview(Review review) {
+        if (reviews == null) {
+            this.reviews = new ArrayList<>();
+        }
+        this.reviews.add(review);
+    }
+    public void addActor(Actor actor) {
+        if (actor == null) {
+            this.actors = new ArrayList<>();
+        }
+        this.actors.add(actor);
+    }
+
+
 }

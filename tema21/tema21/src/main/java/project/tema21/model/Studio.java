@@ -1,6 +1,8 @@
 package project.tema21.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 
 import java.util.ArrayList;
@@ -20,6 +22,7 @@ public class Studio {
     private String address;
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "studio")
+    @JsonBackReference
     private List<Movie> moviesProduced;
 
     public Studio(String studioName, String address, List<Movie> moviesProduced) {
@@ -28,15 +31,11 @@ public class Studio {
         this.moviesProduced = moviesProduced;
     }
 
-    public Studio(int id, String studioName, String address) {
+    public Studio(int id, String studioName, String address, List<Movie> moviesProduced) {
         this.id = id;
         this.studioName = studioName;
         this.address = address;
-    }
-
-    public Studio(String studioName, String address) {
-        this.studioName = studioName;
-        this.address = address;
+        this.moviesProduced = moviesProduced;
     }
 
     public Studio() {
@@ -79,18 +78,7 @@ public class Studio {
         if (moviesProduced == null) {
             this.moviesProduced = new ArrayList<>();
         }
-        else {
-            this.moviesProduced.add(movie);
-        }
-    }
-
-    public void removeMovie(Movie movie) {
-        if (moviesProduced == null) {
-            this.moviesProduced = new ArrayList<>();
-        }
-        else {
-            this.moviesProduced.remove(movie);
-        }
+        this.moviesProduced.add(movie);
     }
 
 

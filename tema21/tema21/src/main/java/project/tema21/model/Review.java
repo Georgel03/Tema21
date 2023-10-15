@@ -1,6 +1,8 @@
 package project.tema21.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 
 @Entity
@@ -17,19 +19,22 @@ public class Review {
     private String reviewer;
 
     @ManyToOne
+    @JsonManagedReference
     @JsonIgnore
     @JoinColumn(name = "movie_rated_id")
     private Movie belongingMovie;
 
-    public Review(int id, String text, String reviewer) {
+    public Review(String text, String reviewer, Movie belongingMovie) {
+        this.text = text;
+        this.reviewer = reviewer;
+        this.belongingMovie = belongingMovie;
+    }
+
+    public Review(int id, String text, String reviewer, Movie belongingMovie) {
         this.id = id;
         this.text = text;
         this.reviewer = reviewer;
-    }
-
-    public Review(String text, String reviewer) {
-        this.text = text;
-        this.reviewer = reviewer;
+        this.belongingMovie = belongingMovie;
     }
 
     public Review() {
@@ -66,4 +71,6 @@ public class Review {
     public void setBelongingMovie(Movie belongingMovie) {
         this.belongingMovie = belongingMovie;
     }
+
+
 }

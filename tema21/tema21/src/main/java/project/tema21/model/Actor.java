@@ -1,6 +1,7 @@
 package project.tema21.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 
 import java.util.ArrayList;
@@ -20,9 +21,10 @@ public class Actor {
 
     private int birthYear;
 
+    @JsonManagedReference
     @ManyToMany(mappedBy = "actors")
     @JsonIgnore
-    private List<Movie> movies;
+    private List<Movie> movies = new ArrayList<>();
 
     public Actor(int id, String actorName, int birthYear) {
         this.id = id;
@@ -84,20 +86,11 @@ public class Actor {
     }
 
     public void addMovie(Movie movie) {
-        if (movies == null) {
+        if (this.movies == null) {
             this.movies = new ArrayList<>();
         }
-        else {
-            this.movies.add(movie);
-        }
+        this.movies.add(movie);
     }
 
-    public void removeMovie(Movie movie) {
-        if (movies == null) {
-            this.movies = new ArrayList<>();
-        }
-        else {
-            this.movies.remove(movie);
-        }
-    }
+
 }
